@@ -1,0 +1,6 @@
+<app-header></app-header>
+<main>
+<app-post-create (eventAdded)="onPostadded($event)"></app-post-create>
+<app-post-list [postList]='addedPosts'></app-post-list>
+</main>
+  

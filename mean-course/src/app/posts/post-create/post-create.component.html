@@ -1,0 +1,12 @@
+<mat-card>
+    <mat-form-field>
+        <input matInput [(ngModel)]='enteredTitle' >
+    </mat-form-field>
+<mat-form-field>
+<textarea matInput [(ngModel)]='enteredContent'  rows="6"></textarea>
+</mat-form-field>
+<button mat-raised-button color="primary" (click)='addPost()'>Submit</button>
+</mat-card>
+
+
+
