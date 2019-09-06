@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Post } from './post.model';
 import { Subject, Observable} from 'rxjs';
 import {HttpClient} from '@angular/common/http'
-import { stringify } from 'querystring';
+import { map } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
 })
@@ -16,14 +16,27 @@ updatedPosts = new Subject<Post[]>();
     this.http.get<{message: string, posts: Post[]}>
     ('http://localhost:3000/api/posts')
     .subscribe((post) => {
-      this.posts = post.posts;
+      this.posts=post.posts;
       this.updatedPosts.next([...this.posts])
     });
   }
 
   addPost(post: Post ) {
-    this.posts.push(post);
-    this.updatedPosts.next(this.posts);
+    this.http.post<{message: string}>('http://localhost:3000/api/post',post)
+    .subscribe(data => {
+      console.log(data);
+      this.posts.push(post);
+      this.updatedPosts.next(this.posts);
+    })
+
+  }
+
+  deletePost(postId:string){
+    console.log(postId);
+    this.http.post('http://localhost:3000/api/posts/',postId)
+    .subscribe(data => {
+      console.log(data);
+    })
   }
 
   listenUpdatedPost(): Observable<Post[]> {
