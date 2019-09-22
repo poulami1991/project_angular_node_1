@@ -7,16 +7,18 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { PostCreateComponent } from './posts/post-create/post-create.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {MatExpansionModule, MatInputModule, MatButtonModule, MatCardModule, MatFormFieldModule, MatToolbarModule} from '@angular/material';
+import {MatExpansionModule, MatInputModule, MatButtonModule, MatCardModule, MatFormFieldModule, MatToolbarModule,MatDialogModule} from '@angular/material';
 import { HeaderComponent } from './header/header.component';
 import { PostListComponent } from './post-list/post-list.component';
 import { PostsService } from './posts/posts.service';
+import { PostEditComponent } from './posts/post-edit/post-edit.component';
 @NgModule({
   declarations: [
     AppComponent,
     PostCreateComponent,
     HeaderComponent,
-    PostListComponent
+    PostListComponent,
+    PostEditComponent
   ],
   imports: [
     BrowserModule,
@@ -28,11 +30,12 @@ import { PostsService } from './posts/posts.service';
     MatButtonModule,
     MatCardModule,
     MatToolbarModule,
-    MatExpansionModule, HttpClientModule
+    MatExpansionModule, MatDialogModule, HttpClientModule
   ],
   providers: [
     PostsService
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents:[PostEditComponent]
 })
 export class AppModule { }
