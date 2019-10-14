@@ -3,6 +3,7 @@ import { Post } from './post.model';
 import { Subject, Observable} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import { map } from 'rxjs/operators';
+import { Router } from '@angular/router';
 @Injectable({
   providedIn: 'root'
 })
@@ -12,7 +13,7 @@ post: Post;
 
 
 updatedPosts = new Subject<Post[]>();
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private router: Router) { }
 
   getPosts() {
     this.http.get<{message: string, postData: any}>
@@ -40,12 +41,13 @@ updatedPosts = new Subject<Post[]>();
 
   addPost(post: Post, editMode?: boolean) {
     if (!editMode) {
-    this.http.post<{message: string, newId: string}>('http://localhost:3000/api/post', post)
+    this.http.post<{message: string, newId: string}>('http://localhost:3000/api/posts', post)
     .subscribe(data => {
-      console.log(data);
+      console.log("Added data",data);
       post.id = data.newId;
       this.posts.push(post);
       this.updatedPosts.next(this.posts);
+      this.router.navigate(['/']) ;
     });
   } else {
     let id = post.id;
@@ -55,6 +57,7 @@ updatedPosts = new Subject<Post[]>();
       postList.push(post);
       this.posts = postList;
       this.updatedPosts.next([...this.posts]);
+      this.router.navigate(['/']) ;
     });
   }
 

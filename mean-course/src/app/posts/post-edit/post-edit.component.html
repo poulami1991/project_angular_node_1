@@ -1,16 +1,21 @@
 <mat-card>
-  <form  (submit)='editPost(createPost)'  #createPost="ngForm">
+  <mat-spinner *ngIf="isLoading"></mat-spinner>
+  <form  [formGroup]="form" (submit)='editPost()' *ngIf="!isLoading">
     <mat-form-field>
-        <input matInput type="text" [ngModel]= "post.title" name='title'
-        placeholder="Enter title"  #titleName="ngModel" required>
-        <mat-error *ngIf="titleName.invalid">Please enter title</mat-error>
+        <input matInput type="text" formControlName="title"
+        placeholder="Enter title"  required>
+        <mat-error *ngIf="form.get('title').invalid">Please enter title</mat-error>
     </mat-form-field>
-    <mat-form-field>
-        <textarea matInput [ngModel]= "post.content" name='enteredContent'
-        placeholder="Enter content"  rows="6" #contentName="ngModel" required></textarea>
-        <mat-error *ngIf="contentName.invalid">Please enter content</mat-error>
-</mat-form-field>
 
+    <mat-form-field>
+        <textarea matInput formControlName="content"
+        placeholder="Enter content"  rows="6" ></textarea>
+        <mat-error *ngIf="form.get('content').invalid">Please enter content</mat-error>
+    </mat-form-field>
+    <div>
+      <button type="button" mat-stroked-button  (click)="filePicker.click()">Pick Image</button>
+      <input type="file"  #filePicker  onchange="onImageChanged($event)"/>
+    </div>
 <button  type="submit" mat-raised-button color="primary"  > Edit </button>
 <button  type="submit" mat-raised-button color="secondary" (click)="onCancel()"> Cancel </button>
 </form>

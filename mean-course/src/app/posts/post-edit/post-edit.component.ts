@@ -1,8 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { PostsService } from '../posts.service';
 import { Post } from '../post.model';
-import { NgForm } from '@angular/forms';
+import { NgForm, FormGroup, FormControl, Validators } from '@angular/forms';
 import {MatDialogRef} from '@angular/material' ;
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
   selector: 'app-post-edit',
@@ -11,29 +12,35 @@ import {MatDialogRef} from '@angular/material' ;
 })
 export class PostEditComponent implements OnInit {
 
-  title: string;
-  content: string;
   postId: string;
   post: Post;
+  isLoading = false;
+  form: FormGroup ;
   constructor(private postservice: PostsService,
               private dialogRef: MatDialogRef<PostEditComponent>) { }
 
   ngOnInit() {
+    this.isLoading = true;
     this.post = this.postservice.getPost();
-    this.title = this.post.title;
-    this.content = this.post.content;
+    this.isLoading = false;
     this.postId = this.post.id;
+    this.form = new FormGroup({
+      title: new FormControl(null, {validators: [Validators.required, Validators.minLength(3)]}),
+      content: new FormControl(null, {validators: [Validators.required]})
+      // 'image': new FormControl()
+    });
+    this.form.setValue({title: this.post.title, content: this.post.content});
 
   }
 
   editPost(form: NgForm): void {
-    if ( form.invalid) {
+    if ( this.form.invalid) {
       return;
     }
     const post: Post = {
       id: this.postId,
-      title: form.value.title,
-      content : form.value.enteredContent
+      title: this.form.value.title,
+      content : this.form.value.content
     };
     this.postservice.addPost(post, true);
     this.onClose();
@@ -41,7 +48,6 @@ export class PostEditComponent implements OnInit {
 
   initializeFormValue(post: Post) {
     this.post = post;
-
   }
 
   onClose() {
